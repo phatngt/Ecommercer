@@ -4,6 +4,7 @@ import 'package:Ecommerce/UI/Register/components/input_form.dart';
 import 'package:Ecommerce/UI/Register/components/square_selection.dart';
 import 'package:Ecommerce/config/sizeconfig.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -16,21 +17,35 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class Body extends StatefulWidget {
-  double sizeListView = SizeConfig.screenHeight * 1.2 / 3;
+  /*Adjust listview size of the inputs when the keyboard is pressed*/
+  //Defauld listview size on screen
+  double defauldSizeListView = SizeConfig.screenHeight * 1.2 / 3;
+  //Resize height of the listview when the input is press
+  double resizeListView = SizeConfig.screenHeight * 1 / 4;
+  // The mark variable that use to determine press input
   bool isSelected = false;
+
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  onFocus(value) {
-    setState(() {
-      if (value) {
-        widget.sizeListView = SizeConfig.screenHeight * 1 / 4;
-      } else {
-        widget.sizeListView = SizeConfig.screenHeight * 1.2 / 3;
-      }
+  //The variable is holding infomation of scaffoldState key
+  GlobalKey<ScaffoldState> _key;
+
+  @override
+  void initState() {
+    super.initState();
+    //Init _key
+    _key = GlobalKey<ScaffoldState>();
+    //When press back-button on keyboard, new listener will is added.
+    KeyboardVisibilityNotification().addNewListener(onHide: () {
+      _key.currentState.setState(() {
+        //Resize the height of the cotainer listview become to default size.
+        widget.defauldSizeListView = SizeConfig.screenHeight * 1.2 / 3;
+      });
     });
   }
 
@@ -38,6 +53,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      key: _key,
       body: Stack(
         children: <Widget>[
           Image(
@@ -57,7 +73,7 @@ class _BodyState extends State<Body> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: SizeConfig.defautSize * 9,
+                    height: SizeConfig.defautSize * 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -77,7 +93,9 @@ class _BodyState extends State<Body> {
                     ],
                   ),
                   Container(
-                    height: widget.sizeListView,
+                    height: widget.isSelected
+                        ? widget.resizeListView
+                        : widget.defauldSizeListView,
                     child: ListView(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -86,43 +104,61 @@ class _BodyState extends State<Body> {
                             hintText: "Full name",
                             fontSize: 16,
                             size: SizeConfig.screenWidth * 2.3 / 3,
+                            onPress: (bool value) {
+                              setState(() {
+                                widget.isSelected = value;
+                              });
+
+                              print(widget.isSelected);
+                            },
                           ),
                           InputForm(
                             hintText: "Email",
                             fontSize: 16,
                             size: SizeConfig.screenWidth * 2.3 / 3,
-                          ),
-                          Focus(
-                            onFocusChange: (value) {
-                              if (value) {
-                                print(value);
+                            onPress: (bool value) {
+                              setState(() {
                                 widget.isSelected = value;
-                                onFocus(widget.isSelected);
-                              }
+                              });
+
+                              print(widget.isSelected);
                             },
-                            child: InputForm(
-                              hintText: "Password",
-                              fontSize: 16,
-                              size: SizeConfig.screenWidth * 2.3 / 3,
-                            ),
                           ),
-                          Focus(
-                            onFocusChange: (value) {
-                              if (value) {
+                          InputForm(
+                            hintText: "Password",
+                            fontSize: 16,
+                            size: SizeConfig.screenWidth * 2.3 / 3,
+                            onPress: (bool value) {
+                              setState(() {
                                 widget.isSelected = value;
-                                onFocus(widget.isSelected);
-                              }
+                              });
+
+                              print(widget.isSelected);
                             },
-                            child: InputForm(
-                              hintText: "Confirm Password",
-                              fontSize: 16,
-                              size: SizeConfig.screenWidth * 2.3 / 3,
-                            ),
+                          ),
+                          InputForm(
+                            hintText: "Confirm Password",
+                            fontSize: 16,
+                            size: SizeConfig.screenWidth * 2.3 / 3,
+                            onPress: (bool value) {
+                              setState(() {
+                                widget.isSelected = value;
+                              });
+
+                              print(widget.isSelected);
+                            },
                           ),
                           InputForm(
                             hintText: "Phone number",
                             fontSize: 16,
                             size: SizeConfig.screenWidth * 2.3 / 3,
+                            onPress: (bool value) {
+                              setState(() {
+                                widget.isSelected = value;
+                              });
+
+                              print(widget.isSelected);
+                            },
                           ),
                         ]),
                   ),

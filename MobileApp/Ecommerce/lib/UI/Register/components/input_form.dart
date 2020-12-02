@@ -4,8 +4,14 @@ class InputForm extends StatefulWidget {
   final TextEditingController input;
   final String hintText;
   final double fontSize, size;
-  const InputForm(
-      {Key key, this.input, this.hintText, this.fontSize = 16, this.size})
+  Function(bool) onPress;
+  InputForm(
+      {Key key,
+      this.input,
+      this.hintText,
+      this.fontSize = 16,
+      this.size,
+      this.onPress})
       : super(key: key);
   @override
   _InputFormState createState() => _InputFormState();
@@ -35,6 +41,9 @@ class _InputFormState extends State<InputForm> {
       child: Focus(
         onFocusChange: (value) {
           changeColor(value);
+          if (value) {
+            widget.onPress(value);
+          }
         },
         child: TextField(
             controller: widget.input,
