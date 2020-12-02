@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class InputForm extends StatefulWidget {
   final TextEditingController input;
   final String hintText;
-  final double fontSize;
-  const InputForm({Key key, this.input, this.hintText, this.fontSize = 16})
+  final double fontSize, size;
+  const InputForm(
+      {Key key, this.input, this.hintText, this.fontSize = 16, this.size})
       : super(key: key);
   @override
   _InputFormState createState() => _InputFormState();
@@ -30,6 +31,7 @@ class _InputFormState extends State<InputForm> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2),
       padding: EdgeInsets.symmetric(horizontal: 10),
+      width: widget.size,
       child: Focus(
         onFocusChange: (value) {
           changeColor(value);
