@@ -3,8 +3,8 @@ import 'package:Ecommerce/UI/Register/components/radio_selection.dart';
 import 'package:Ecommerce/UI/Register/components/input_form.dart';
 import 'package:Ecommerce/UI/Register/components/square_selection.dart';
 import 'package:Ecommerce/config/sizeconfig.dart';
+import 'package:Ecommerce/services/register.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -19,6 +19,8 @@ class RegisterScreen extends StatelessWidget {
 
 // ignore: must_be_immutable
 class Body extends StatefulWidget {
+  Register register;
+
   /*Adjust listview size of the inputs when the keyboard is pressed*/
   //Defauld listview size on screen
   double defauldSizeListView = SizeConfig.screenHeight * 1.2 / 3;
@@ -32,28 +34,16 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  //The variable is holding infomation of scaffoldState key
-  GlobalKey<ScaffoldState> _key;
-
-  @override
-  void initState() {
-    super.initState();
-    //Init _key
-    _key = GlobalKey<ScaffoldState>();
-    //When press back-button on keyboard, new listener will is added.
-    KeyboardVisibilityNotification().addNewListener(onHide: () {
-      _key.currentState.setState(() {
-        //Resize the height of the cotainer listview become to default size.
-        widget.defauldSizeListView = SizeConfig.screenHeight * 1.2 / 3;
-      });
-    });
-  }
+  TextEditingController fullname = new TextEditingController();
+  TextEditingController email = new TextEditingController();
+  TextEditingController password = new TextEditingController();
+  TextEditingController confirmPassword = new TextEditingController();
+  TextEditingController phoneNumber = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      key: _key,
       body: Stack(
         children: <Widget>[
           Image(
@@ -108,9 +98,8 @@ class _BodyState extends State<Body> {
                               setState(() {
                                 widget.isSelected = value;
                               });
-
-                              print(widget.isSelected);
                             },
+                            input: fullname,
                           ),
                           InputForm(
                             hintText: "Email",
@@ -120,9 +109,8 @@ class _BodyState extends State<Body> {
                               setState(() {
                                 widget.isSelected = value;
                               });
-
-                              print(widget.isSelected);
                             },
+                            input: email,
                           ),
                           InputForm(
                             hintText: "Password",
@@ -132,22 +120,19 @@ class _BodyState extends State<Body> {
                               setState(() {
                                 widget.isSelected = value;
                               });
-
-                              print(widget.isSelected);
                             },
+                            input: password,
                           ),
                           InputForm(
-                            hintText: "Confirm Password",
-                            fontSize: 16,
-                            size: SizeConfig.screenWidth * 2.3 / 3,
-                            onPress: (bool value) {
-                              setState(() {
-                                widget.isSelected = value;
-                              });
-
-                              print(widget.isSelected);
-                            },
-                          ),
+                              hintText: "Confirm Password",
+                              fontSize: 16,
+                              size: SizeConfig.screenWidth * 2.3 / 3,
+                              onPress: (bool value) {
+                                setState(() {
+                                  widget.isSelected = value;
+                                });
+                              },
+                              input: confirmPassword),
                           InputForm(
                             hintText: "Phone number",
                             fontSize: 16,
@@ -156,9 +141,8 @@ class _BodyState extends State<Body> {
                               setState(() {
                                 widget.isSelected = value;
                               });
-
-                              print(widget.isSelected);
                             },
+                            input: phoneNumber,
                           ),
                         ]),
                   ),
@@ -171,7 +155,15 @@ class _BodyState extends State<Body> {
                     text: "Register",
                     textColor: Colors.white,
                     borderRadius: 20,
-                    press: () async {},
+                    press: () async {
+                      widget.register = new Register(
+                          fullName: fullname.text,
+                          email: email.text,
+                          password: password.text,
+                          confirmPassword: confirmPassword.text,
+                          phoneNumber: phoneNumber.text);
+                      widget.register.registerAccountIntoFirebase();
+                    },
                   ),
                 ],
               ),
