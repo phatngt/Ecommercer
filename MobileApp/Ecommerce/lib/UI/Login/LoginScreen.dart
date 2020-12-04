@@ -2,6 +2,7 @@ import 'package:Ecommerce/UI/Login/body.dart';
 import 'package:Ecommerce/config/sizeconfig.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();

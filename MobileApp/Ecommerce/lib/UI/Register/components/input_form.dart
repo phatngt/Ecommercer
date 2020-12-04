@@ -1,25 +1,33 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class InputForm extends StatefulWidget {
   final TextEditingController input;
-  final String hintText;
+  final String hintText, labelText;
   final double fontSize, size;
+  final bool isPassVisitble;
   Function(bool) onPress;
+  Function(String) validator;
   InputForm(
       {Key key,
       this.input,
       this.hintText,
+      this.labelText,
       this.fontSize = 16,
       this.size,
-      this.onPress})
+      this.onPress,
+      this.validator,
+      this.isPassVisitble = false})
       : super(key: key);
   @override
   _InputFormState createState() => _InputFormState();
 }
 
 class _InputFormState extends State<InputForm> {
-  Color hintColor = Color(0xFFEF5350);
+  final _formKey = GlobalKey<FormState>();
 
+  Color hintColor = Color(0xFFEF5350);
   changeColor(bool hasFocus) {
     if (hasFocus) {
       setState(() {
@@ -45,15 +53,28 @@ class _InputFormState extends State<InputForm> {
             widget.onPress(value);
           }
         },
-        child: TextField(
-            controller: widget.input,
-            decoration: InputDecoration(
-                hintText: widget.hintText,
-                hintStyle: TextStyle(
-                    fontFamily: "Inter",
-                    color: hintColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: widget.fontSize))),
+        child: TextFormField(
+          controller: widget.input,
+          obscureText: widget.isPassVisitble,
+          validator: (value) {
+            return widget.validator(value);
+          },
+          decoration: InputDecoration(
+              hintText: widget.hintText,
+              labelText: widget.labelText,
+              labelStyle: TextStyle(
+                fontFamily: "Inter",
+                color: hintColor,
+                fontWeight: FontWeight.w600,
+                fontSize: widget.fontSize,
+              ),
+              hintStyle: TextStyle(
+                fontFamily: "Inter",
+                color: hintColor,
+                fontWeight: FontWeight.w600,
+                fontSize: widget.fontSize,
+              )),
+        ),
       ),
     );
   }

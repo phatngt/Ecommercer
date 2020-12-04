@@ -6,15 +6,15 @@ class BasicInput extends StatefulWidget {
   final TextEditingController input;
   double boxSize, fontSize = 0, borderRadius = 0;
 
-  BasicInput(
-      {Key key,
-      this.hint,
-      this.icon,
-      this.input,
-      this.boxSize,
-      this.fontSize,
-      this.borderRadius})
-      : super(key: key);
+  BasicInput({
+    Key key,
+    this.hint,
+    this.icon,
+    this.input,
+    this.boxSize,
+    this.fontSize,
+    this.borderRadius,
+  }) : super(key: key);
 
   @override
   _BasicInputState createState() => _BasicInputState();
